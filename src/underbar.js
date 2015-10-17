@@ -200,6 +200,24 @@
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
+    var toggle = true;
+    if (!collection.length){
+      return false;
+    }
+    if (!iterator){
+      iterator = _.identity;
+    }
+
+    _.every(collection, function(value){
+      if (!iterator(value)){
+        toggle = false;
+        return true;
+      }
+      else {
+        toggle = true;
+      }
+    });
+    return toggle;
     // TIP: There's a very clever way to re-use every() here.
   };
 
