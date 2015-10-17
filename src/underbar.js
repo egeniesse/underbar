@@ -91,13 +91,19 @@
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
+    return _.filter(collection, function(value){
+      return (!test(value));
+    });
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
   };
 
   // Produce a duplicate-free version of the array.
-  _.uniq = function(array) {
-  };
+ /* _.uniq = function(array) {
+    return _.reduce(array, function(startValue, element){
+      if ()
+    }, [])
+  };*/
 
 
   // Return the results of applying an iterator to each element.
@@ -147,15 +153,16 @@
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
 
-    _.each(collection, function(value){
+    var startIndex = 0;
 
-      if (!accumulator && accumulator !== 0){
+    if (!accumulator && accumulator !== 0){
         accumulator = collection[0];
+        startIndex = 1;
       }
 
-      else {
-        accumulator = iterator(accumulator, value)
-      }
+    _.each(collection.slice(startIndex), function(value){
+
+      accumulator = iterator(accumulator, value)
 
     });
     return accumulator;
@@ -176,6 +183,17 @@
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
+    if (!iterator){
+      iterator = _.identity;
+    }
+    return _.reduce(collection, function(startValue, value){
+      if (startValue){
+        return iterator(value) ? true : false;
+      }
+      else {
+        return false;
+      }
+    }, true);
     // TIP: Try re-using reduce() here.
   };
 
