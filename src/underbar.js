@@ -79,6 +79,14 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+
+    return _.reduce(collection, function(startValue, element){
+      if (test(element)){
+        startValue.push(element);
+      }
+      return startValue;
+    }, []);
+
   };
 
   // Return all elements of an array that don't pass a truth test.
@@ -138,6 +146,19 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+
+    _.each(collection, function(value){
+
+      if (!accumulator && accumulator !== 0){
+        accumulator = collection[0];
+      }
+
+      else {
+        accumulator = iterator(accumulator, value)
+      }
+
+    });
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
