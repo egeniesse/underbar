@@ -99,15 +99,24 @@
   };
 
   // Produce a duplicate-free version of the array.
- /* _.uniq = function(array) {
+ _.uniq = function(array) {
     return _.reduce(array, function(startValue, element){
-      if ()
+      if (!_.some(startValue, function(value){return value === element})){
+        startValue.push(element);
+      }
+      return startValue;
     }, [])
-  };*/
+  };
 
 
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
+
+    return _.reduce(collection, function(finalArr, element){
+      finalArr.push(iterator(element));
+
+      return finalArr;
+    }, [])
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
