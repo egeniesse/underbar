@@ -253,9 +253,6 @@
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
 
-    if (obj === undefined){
-        return {};
-    }
     return _.reduce(arguments, function(finalObj, object){
       
       _.each(object, function(value, key){
@@ -269,6 +266,16 @@
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+
+    return _.reduce(arguments, function(finalObj, object){
+
+      _.each(object, function(value, key){
+        if (finalObj[key]=== undefined){
+          finalObj[key] = value;
+        }
+      });
+      return finalObj;
+    }, arguments[0]);
   };
 
 
@@ -312,6 +319,18 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+
+   return function () {
+      var args = Array.prototype.slice.call(arguments); // turning the arguments object into a string object
+
+      func.memoize = func.memoize || {};
+
+      if (!(args in func.memoize)){
+        func.memoize[args] = func.apply(this, args);
+      } 
+      
+      return func.memoize[args];
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -321,6 +340,10 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments, 2);
+    setTimeout(function(){
+      func.apply(null, args);
+    }, wait);
   };
 
 
@@ -335,6 +358,22 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var shuffleArr = array.slice(0);
+    var temp;
+    var index;
+    var counter = shuffleArr.length;
+
+    while (counter > 0){
+
+      index = Math.floor(Math.random()* counter);
+
+      counter --;
+
+      temp = shuffleArr[counter];
+      shuffleArr[counter]= shuffleArr[index];
+      shuffleArr[index] = temp;
+    };
+    return shuffleArr;
   };
 
 
