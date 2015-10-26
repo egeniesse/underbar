@@ -51,12 +51,12 @@
     if (Array.isArray(collection)){
       for (var i = 0; i < collection.length; i++){
         iterator(collection[i], i, collection);
-      };
+      }
     }
     else {
       for (var key in collection){
         iterator(collection[key], key, collection);
-      };
+      }
     }
   };
 
@@ -101,11 +101,11 @@
   // Produce a duplicate-free version of the array.
  _.uniq = function(array) {
     return _.reduce(array, function(startValue, element){
-      if (!_.some(startValue, function(value){return value === element})){
+      if (!_.some(startValue, function(value){ return value === element; })){
         startValue.push(element);
       }
       return startValue;
-    }, [])
+    }, []);
   };
 
 
@@ -167,13 +167,13 @@
     if (accumulator === undefined && Array.isArray(collection)){
         accumulator = collection[0];
         startIndex = 1;
-        collection = collection.slice(startIndex)
+        collection = collection.slice(startIndex);
 
       }
 
     _.each(collection, function(value){
 
-      accumulator = iterator(accumulator, value)
+      accumulator = iterator(accumulator, value);
 
     });
     return accumulator;
@@ -339,6 +339,7 @@
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
+  
   _.delay = function(func, wait) {
     var args = Array.prototype.slice.call(arguments, 2);
     setTimeout(function(){
@@ -372,7 +373,7 @@
       temp = shuffleArr[counter];
       shuffleArr[counter]= shuffleArr[index];
       shuffleArr[index] = temp;
-    };
+    }
     return shuffleArr;
   };
 
@@ -388,6 +389,17 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+
+    var isFunction = typeof functionOrKey === "function";
+
+    return _.map(collection, function(value){
+      if (isFunction){
+        return functionOrKey.apply(value, args);
+      }
+      else{
+        return value[functionOrKey].apply(value, args);
+      }
+    });
   };
 
   // Sort the object's values by a criterion produced by an iterator.
