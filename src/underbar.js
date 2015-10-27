@@ -407,6 +407,24 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+
+    return collection.sort(function(a,b){ 
+
+      var iteratorA, iteratorB;
+
+      if (typeof iterator === "function"){
+        iteratorA = iterator(a);
+        iteratorB = iterator(b);
+      }
+
+      else{
+        iterator = String(iterator);
+        iteratorA = a[iterator]; 
+        iteratorB = b[iterator];
+       }
+
+       return iteratorA - iteratorB;        
+    });
   };
 
   // Zip together two or more arrays with elements of the same index
@@ -415,7 +433,7 @@
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
-    var argumentsArray = Array.prototype.slice.call(arguments).sort(function(b,a){ return a.length - b.length });
+    var argumentsArray = Array.prototype.slice.call(arguments).sort(function(b,a){ return a.length - b.length; });
 
     for (var i = 0; i < argumentsArray[0].length; i ++){
       argumentsArray[0][i] = [argumentsArray[0][i]];
@@ -433,13 +451,12 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
-    console.log(nestedArray);
 
       nestedArray = _.reduce(nestedArray, function(startValue, element){
         return startValue.concat(element);
       }, []);
 
-      if(_.some(nestedArray, function(element){ return Array.isArray(element) })){
+      if(_.some(nestedArray, function(element){ return Array.isArray(element); })){
         return _.flatten(nestedArray);
       }
       else {
